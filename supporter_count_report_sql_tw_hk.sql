@@ -1,3 +1,4 @@
+
 ----New Donor
 CREATE TEMP TABLE supporter_count_newdonor AS 
 select * from
