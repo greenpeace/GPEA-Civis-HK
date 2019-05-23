@@ -105,10 +105,11 @@ left join
 left join gpea_analytics.extract_opportunity y on x.constituentID=y.ConstituentID and x.minDebitdate=y.DebitDate
 inner join gpea_analytics.extract_campaign z on z.CampaignId=y.CampaignID) c on b.ConstituentID=c.ConstituentID);
 
+
 ---unionall_HKTW:
 create temp table supporter_count_unionHKTW as select * from (
 ----NewDonor
-select 'Actual' as Comparison, Region, debityear as Year, to_char(debitmonth,'Mon') as Month, to_date(debitdate,' YYYY- MM- DD') as Date,
+select 'Actual' as Comparison, Region, debityear as Year, debitmonth as Month, to_date(debitdate,' YYYY- MM- DD') as Date,
 constituentID, campaignid, Name, Source,'' as Resource,
 Team,Type, count as NewDonor_Actual, amount as NewDonorAmt_Actual, 0 as CurrentDonor_Actual,0 as LapseDonor_Actual, 0 as CanceledDonor,0 as DonatedDonor from supporter_count_newdonor
 ----CurrentDonor 
@@ -133,24 +134,23 @@ union all
 select 'Actual' as Comparison,Region,Year, Month as Month, to_date(Date,' YYYY- MM- DD'),
 '' as constituentID, '' as campaignid, '' as name, Source, '' as Resource,
 '' as team,type, 0 as NewDonor_Actual, 0 as NewDonorAmt_Actual, 0 as CurrentDonor_Actual, 0 as LapseDonor_Actual, 0 as CanceledDonor,count(distinct constituentID) as DonatedDonor  from supporter_count_donateddonor
-Group by Region, Year, Month, date,Type, Source);
-----UnionBudgetData
----union all
----select comparison as Comparison,region as Region,year as Year, month as Month, to_date(date,' YYYY- MM- DD') as Date,
----constituentid as constituentID, campaignid as campaignid,name,source as Source,resource as Resource,
----team, type, case when source in ('DDC','DRTC','Reactivation','Telephone','Web') then activedonor_actual else 0 end as NewDonor_Actual,
----0 as NewDonorAmt_Actual, case when source in ('Current') then activedonor_actual else 0 end as CurrentDonor_Actual, 
----case when source in ('Lapsed') then -activedonor_actual else 0 end as LapseDonor_Actual, 0 as CanceledDonor,0 as DonatedDonor  from gpea_analytics.extract_2019budget_supporter
----union all
----select comparison as Comparison,region as Region,year as Year,month as Month, date as Date,
----constituentid as constituentID, campaignid as campaignid,name,source as Source,resource as Resource,
----team, type, case when source in ('DDC','DRTC','Reactivation','Telephone','Web') then activedonor_actual else 0 end as NewDonor_Actual,
----0 as NewDonorAmt_Actual, case when source in ('Current') then activedonor_actual else 0 end as CurrentDonor_Actual, 
----case when source in ('Lapsed') then -activedonor_actual else 0 end as LapseDonor_Actual, 0 as CanceledDonor,0 as DonatedDonor  from gpea_analytics.extract_2018budget_supporter);
+Group by Region, Year, Month, date,Type, Source
+---UnionBudgetData
+union all
+select comparison as Comparison,region as Region,year as Year, month as Month, to_date(date,' YYYY- MM- DD') as Date,
+constituentid as constituentID, campaignid as campaignid,name,source as Source,resource as Resource,
+team, type, case when source in ('DDC','DRTC','Reactivation','Telephone','Web') then activedonor_actual else 0 end as NewDonor_Actual,
+0 as NewDonorAmt_Actual, case when source in ('Current') then activedonor_actual else 0 end as CurrentDonor_Actual, 
+case when source in ('Lapsed') then -activedonor_actual else 0 end as LapseDonor_Actual, 0 as CanceledDonor,0 as DonatedDonor  from gpea_analytics.extract_2019budget_supporter
+union all
+select comparison as Comparison,region as Region,year as Year, month as Month, to_date(date,' YYYY- MM- DD') as Date,
+constituentid as constituentID, campaignid as campaignid,name,source as Source,resource as Resource,
+team, type, case when source in ('DDC','DRTC','Reactivation','Telephone','Web') then activedonor_actual else 0 end as NewDonor_Actual,
+0 as NewDonorAmt_Actual, case when source in ('Current') then activedonor_actual else 0 end as CurrentDonor_Actual, 
+case when source in ('Lapsed') then -activedonor_actual else 0 end as LapseDonor_Actual, 0 as CanceledDonor,0 as DonatedDonor  from gpea_analytics.extract_2018budget_supporter);
 
 ---createtable
 DROP TABLE if exists gpea_reporting.table_report_supporter_count; 
 CREATE TABLE gpea_reporting.table_report_supporter_count AS (
 select * from supporter_count_unionHKTW)
-
 
