@@ -152,5 +152,131 @@ case when source in ('Lapsed') then -activedonor_actual else 0 end as LapseDonor
 ---createtable
 DROP TABLE if exists gpea_reporting.table_report_supporter_count; 
 CREATE TABLE gpea_reporting.table_report_supporter_count AS (
-select * from supporter_count_unionHKTW)
+select * from supporter_count_unionHKTW);
 
+-- GRANT Statements for GPEA Group
+GRANT ALL ON SCHEMA gpea_analytics TO GROUP gpea;
+GRANT ALL ON SCHEMA gpea_staging TO GROUP gpea;
+GRANT ALL ON SCHEMA gpea_reporting TO GROUP gpea;
+GRANT ALL ON SCHEMA public TO GROUP gpea;
+
+GRANT ALL ON gpea_analytics.extract_activity_tfr TO GROUP gpea;
+GRANT ALL ON gpea_analytics.extract_automatedtransaction TO GROUP gpea;
+GRANT ALL ON gpea_analytics.extract_campaign TO GROUP gpea;
+GRANT ALL ON gpea_analytics.extract_campaignmember TO GROUP gpea;
+GRANT ALL ON gpea_analytics.extract_case TO GROUP gpea;
+GRANT ALL ON gpea_analytics.extract_contact TO GROUP gpea;
+GRANT ALL ON gpea_analytics.extract_creditcard TO GROUP gpea;
+GRANT ALL ON gpea_analytics.extract_lead TO GROUP gpea;
+GRANT ALL ON gpea_analytics.extract_opportunity TO GROUP gpea;
+GRANT ALL ON gpea_analytics.extract_regulargiving TO GROUP gpea;
+GRANT ALL ON gpea_analytics.extract_rgli TO GROUP gpea;
+GRANT ALL ON gpea_analytics.extract_schedule TO GROUP gpea;
+GRANT ALL ON gpea_analytics.extract_staging TO GROUP gpea;
+GRANT ALL ON gpea_analytics.extract_tfrcall TO GROUP gpea;
+GRANT ALL ON gpea_analytics.extract_transaction TO GROUP gpea;
+GRANT ALL ON gpea_analytics.extract_transactionitem TO GROUP gpea;
+GRANT ALL ON gpea_reporting.table_report_income TO GROUP gpea;
+
+GRANT ALL ON gpea_staging.kr_supporter_alc TO GROUP gpea;
+GRANT ALL ON gpea_staging.kr_refund TO GROUP gpea;
+GRANT ALL ON gpea_staging.kr_income_account TO GROUP gpea;
+GRANT ALL ON gpea_staging.kr_upgrade_monthly TO GROUP gpea;
+GRANT ALL ON gpea_staging.kr_downgrade_monthly TO GROUP gpea;
+GRANT ALL ON gpea_staging.kr_vw_mrm_history TO GROUP gpea;
+GRANT ALL ON gpea_staging.kr_vw_mrm_payment_result TO GROUP gpea;
+GRANT ALL ON gpea_staging.currency_conversion TO GROUP gpea;
+
+GRANT ALL ON gpea_staging.kr_vw_mrm_groups TO GROUP gpea;
+
+GRANT ALL ON gpea_analytics.extract_2017budget_income TO GROUP gpea;
+GRANT ALL ON gpea_analytics.extract_2018budget_income TO GROUP gpea;
+GRANT ALL ON gpea_analytics.extract_2018budget_supporter TO GROUP gpea;
+GRANT ALL ON gpea_analytics.extract_2019budget_income TO GROUP gpea;
+GRANT ALL ON gpea_analytics.extract_2019budget_supporter TO GROUP gpea;
+GRANT ALL ON gpea_analytics.extract_budget_recode_group TO GROUP gpea;
+
+
+-- GRANT Statements for GPEA Robot User
+GRANT ALL ON SCHEMA gpea_analytics TO greenpeaceearobot;
+GRANT ALL ON SCHEMA gpea_staging TO greenpeaceearobot;
+GRANT ALL ON SCHEMA gpea_reporting TO greenpeaceearobot;
+GRANT ALL ON SCHEMA public TO greenpeaceearobot;
+
+GRANT ALL ON gpea_analytics.extract_activity_tfr TO greenpeaceearobot;
+GRANT ALL ON gpea_analytics.extract_automatedtransaction TO greenpeaceearobot;
+GRANT ALL ON gpea_analytics.extract_campaign TO greenpeaceearobot;
+GRANT ALL ON gpea_analytics.extract_campaignmember TO greenpeaceearobot;
+GRANT ALL ON gpea_analytics.extract_case TO greenpeaceearobot;
+GRANT ALL ON gpea_analytics.extract_contact TO greenpeaceearobot;
+GRANT ALL ON gpea_analytics.extract_creditcard TO greenpeaceearobot;
+GRANT ALL ON gpea_analytics.extract_lead TO greenpeaceearobot;
+GRANT ALL ON gpea_analytics.extract_opportunity TO greenpeaceearobot;
+GRANT ALL ON gpea_analytics.extract_regulargiving TO greenpeaceearobot;
+GRANT ALL ON gpea_analytics.extract_rgli TO greenpeaceearobot;
+GRANT ALL ON gpea_analytics.extract_schedule TO greenpeaceearobot;
+GRANT ALL ON gpea_analytics.extract_staging TO greenpeaceearobot;
+GRANT ALL ON gpea_analytics.extract_tfrcall TO greenpeaceearobot;
+GRANT ALL ON gpea_analytics.extract_transaction TO greenpeaceearobot;
+GRANT ALL ON gpea_analytics.extract_transactionitem TO greenpeaceearobot;
+GRANT ALL ON gpea_reporting.table_report_income TO greenpeaceearobot;
+
+GRANT ALL ON gpea_staging.kr_supporter_alc TO greenpeaceearobot;
+GRANT ALL ON gpea_staging.kr_refund TO greenpeaceearobot;
+GRANT ALL ON gpea_staging.kr_income_account TO greenpeaceearobot;
+GRANT ALL ON gpea_staging.kr_upgrade_monthly TO greenpeaceearobot;
+GRANT ALL ON gpea_staging.kr_downgrade_monthly TO greenpeaceearobot;
+GRANT ALL ON gpea_staging.kr_vw_mrm_history TO greenpeaceearobot;
+GRANT ALL ON gpea_staging.kr_vw_mrm_payment_result TO greenpeaceearobot;
+GRANT ALL ON gpea_staging.currency_conversion TO greenpeaceearobot;
+
+GRANT ALL ON gpea_staging.kr_vw_mrm_groups TO greenpeaceearobot;
+
+GRANT ALL ON gpea_analytics.extract_2017budget_income TO greenpeaceearobot;
+GRANT ALL ON gpea_analytics.extract_2018budget_income TO greenpeaceearobot;
+GRANT ALL ON gpea_analytics.extract_2018budget_supporter TO greenpeaceearobot;
+GRANT ALL ON gpea_analytics.extract_2019budget_income TO greenpeaceearobot;
+GRANT ALL ON gpea_analytics.extract_2019budget_supporter TO greenpeaceearobot;
+GRANT ALL ON gpea_analytics.extract_budget_recode_group TO greenpeaceearobot;
+
+-- GRANT Statements for Civis Group
+GRANT ALL ON SCHEMA gpea_analytics TO GROUP civis;
+GRANT ALL ON SCHEMA gpea_staging TO GROUP civis;
+GRANT ALL ON SCHEMA gpea_reporting TO GROUP civis;
+GRANT ALL ON SCHEMA public TO GROUP civis;
+
+GRANT ALL ON gpea_analytics.extract_activity_tfr TO GROUP civis;
+GRANT ALL ON gpea_analytics.extract_automatedtransaction TO GROUP civis;
+GRANT ALL ON gpea_analytics.extract_campaign TO GROUP civis;
+GRANT ALL ON gpea_analytics.extract_campaignmember TO GROUP civis;
+GRANT ALL ON gpea_analytics.extract_case TO GROUP civis;
+GRANT ALL ON gpea_analytics.extract_contact TO GROUP civis;
+GRANT ALL ON gpea_analytics.extract_creditcard TO GROUP civis;
+GRANT ALL ON gpea_analytics.extract_lead TO GROUP civis;
+GRANT ALL ON gpea_analytics.extract_opportunity TO GROUP civis;
+GRANT ALL ON gpea_analytics.extract_regulargiving TO GROUP civis;
+GRANT ALL ON gpea_analytics.extract_rgli TO GROUP civis;
+GRANT ALL ON gpea_analytics.extract_schedule TO GROUP civis;
+GRANT ALL ON gpea_analytics.extract_staging TO GROUP civis;
+GRANT ALL ON gpea_analytics.extract_tfrcall TO GROUP civis;
+GRANT ALL ON gpea_analytics.extract_transaction TO GROUP civis;
+GRANT ALL ON gpea_analytics.extract_transactionitem TO GROUP civis;
+GRANT ALL ON gpea_reporting.table_report_income TO GROUP civis;
+
+GRANT ALL ON gpea_staging.kr_supporter_alc TO GROUP civis;
+GRANT ALL ON gpea_staging.kr_refund TO GROUP civis;
+GRANT ALL ON gpea_staging.kr_income_account TO GROUP civis;
+GRANT ALL ON gpea_staging.kr_upgrade_monthly TO GROUP civis;
+GRANT ALL ON gpea_staging.kr_downgrade_monthly TO GROUP civis;
+GRANT ALL ON gpea_staging.kr_vw_mrm_history TO GROUP civis;
+GRANT ALL ON gpea_staging.kr_vw_mrm_payment_result TO GROUP civis;
+GRANT ALL ON gpea_staging.currency_conversion TO GROUP civis;
+
+GRANT ALL ON gpea_staging.kr_vw_mrm_groups TO GROUP civis;
+
+GRANT ALL ON gpea_analytics.extract_2017budget_income TO GROUP civis;
+GRANT ALL ON gpea_analytics.extract_2018budget_income TO GROUP civis;
+GRANT ALL ON gpea_analytics.extract_2018budget_supporter TO GROUP civis;
+GRANT ALL ON gpea_analytics.extract_2019budget_income TO GROUP civis;
+GRANT ALL ON gpea_analytics.extract_2019budget_supporter TO GROUP civis;
+GRANT ALL ON gpea_analytics.extract_budget_recode_group TO GROUP civis;
