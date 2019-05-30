@@ -1,5 +1,8 @@
 ---Monthcount import: https://platform.civisanalytics.com/spa/#/imports/23588454
 ---Budget tables import: https://platform.civisanalytics.com/spa/#/imports/21208802
+---Staging table import: https://platform.civisanalytics.com/spa/#/imports/13823492
+---GPEA Universe Workflow: https://platform.civisanalytics.com/spa/#/workflows/2958
+---Analytics extract tables create: https://platform.civisanalytics.com/spa/#/scripts/sql/20929562
 
 
 ----New Donor
@@ -31,7 +34,7 @@ OR (z.Expr1 IS NULL);
 Create Temp Table supporter_count_currentdonor AS
 select * from 
 (select 
-b.Region, date_part(year,(DATEADD(Month, a.MonthCount - 1, b.DebitDate))) AS CurrentYear, to_char((DATEADD(month, a.MonthCount - 1, b.DebitDate)),'Mon') AS CurrentMonth, MAX(DATEADD(month, a.MonthCount - 1, b.DebitDate)) AS CurrentDate, b.ConstituentID, MAX(b.Type) AS Type, c.Programme AS Source, 0 AS Count
+b.Region, date_part(year,(DATEADD(Month, a.MonthCount - 1, b.DebitDate))) AS CurrentYear, to_char((DATEADD(month, a.MonthCount - 1, b.DebitDate)),'Mon') AS CurrentMonth, to_char(MAX(DATEADD(month, a.MonthCount - 1, b.DebitDate)),'YYYY-MM-DD') AS CurrentDate, b.ConstituentID, MAX(b.Type) AS Type, c.Programme AS Source, 0 AS Count
 FROM            
 gpea_staging.monthcount a
 CROSS JOIN
@@ -109,41 +112,41 @@ inner join gpea_analytics.extract_campaign z on z.CampaignId=y.CampaignID) c on 
 ---unionall_HKTW:
 create temp table supporter_count_unionHKTW as select * from (
 ----NewDonor
-select 'Actual' as Comparison, Region, debityear as Year, debitmonth as Month, to_date(debitdate,' YYYY- MM- DD') as Date,
+select 'Actual' as Comparison, Region, debityear as Year, debitmonth as Month, to_date(debitdate,'YYYY-MM-DD') as Date,
 constituentID, campaignid, Name, Source,'' as Resource,
 Team,Type, count as NewDonor_Actual, amount as NewDonorAmt_Actual, 0 as CurrentDonor_Actual,0 as LapseDonor_Actual, 0 as CanceledDonor,0 as DonatedDonor from supporter_count_newdonor
 ----CurrentDonor 
 union all
-select  'Actual' as Comparison, Region,currentyear as Year,currentmonth as Month,to_date(min(currentdate),' YYYY- MM- DD') as Date,
+select  'Actual' as Comparison, Region,currentyear as Year,currentmonth as Month,to_date(min(currentdate),'YYYY-MM-DD') as Date,
 '' as constituentID,'' as comapignid, '' as Name, Source,'' as Resource,
 '' as Team, type,0 as NewDonor_Actual, 0 as NewDonorAmt_Actual,count(distinct constituentID) as CurrentDonor_Actual, 0 as LapseDonor_Actual,0 as CanceledDonor,0 as DonatedDonor from supporter_count_currentdonor
 Group by Region, CurrentYear, CurrentMonth, Type, Source
 ----LapsedDonor
 union all
-select 'Actual' as Comparison,Region,Debityear as Year, debitmonth as Month, to_date(Date,' YYYY- MM- DD'),
+select 'Actual' as Comparison,Region,Debityear as Year, debitmonth as Month, to_date(Date,'YYYY-MM-DD'),
 constituentID, '' as campaignID, '' as name, Source,'' as Resource,
 '' as team,type, 0 as NewDonor_Actual, 0 as NewDonorAmt_Actual, 0 as CurrentDonor_Actual, Count as LapseDonor_Actual, 0 as CanceledDonor,0 as DonatedDonor from supporter_count_lapseddonor
 ----CanceledDonor
 union all
-select 'Actual' as Comparison,Region,Year, CurrentMonth as Month, to_date(Date,' YYYY- MM- DD'),
+select 'Actual' as Comparison,Region,Year, CurrentMonth as Month, to_date(Date,'YYYY-MM-DD'),
 '' as constituentID, '' as campaignID, '' as name, Source,'' as Resource,
 '' as team,type, 0 as NewDonor_Actual, 0 as NewDonorAmt_Actual, 0 as CurrentDonor_Actual, 0 as LapseDonor_Actual, count(distinct constituentID) as CanceledDonor,0 as DonatedDonor  from supporter_count_canceleddonor
 Group by Region, Year, CurrentMonth, date,Type, Source
 ----DonatedDonor
 union all
-select 'Actual' as Comparison,Region,Year, Month as Month, to_date(Date,' YYYY- MM- DD'),
+select 'Actual' as Comparison,Region,Year, Month as Month, to_date(Date,'YYYY-MM-DD'),
 '' as constituentID, '' as campaignid, '' as name, Source, '' as Resource,
 '' as team,type, 0 as NewDonor_Actual, 0 as NewDonorAmt_Actual, 0 as CurrentDonor_Actual, 0 as LapseDonor_Actual, 0 as CanceledDonor,count(distinct constituentID) as DonatedDonor  from supporter_count_donateddonor
 Group by Region, Year, Month, date,Type, Source
 ---UnionBudgetData
 union all
-select comparison as Comparison,region as Region,year as Year, month as Month, to_date(date,' YYYY- MM- DD') as Date,
+select comparison as Comparison,region as Region,year as Year, month as Month, to_date(date,'YYYY-MM-DD') as Date,
 constituentid as constituentID, campaignid as campaignid,name,source as Source,resource as Resource,
 team, type, case when source in ('DDC','DRTC','Reactivation','Telephone','Web') then activedonor_actual else 0 end as NewDonor_Actual,
 0 as NewDonorAmt_Actual, case when source in ('Current') then activedonor_actual else 0 end as CurrentDonor_Actual, 
 case when source in ('Lapsed') then -activedonor_actual else 0 end as LapseDonor_Actual, 0 as CanceledDonor,0 as DonatedDonor  from gpea_analytics.extract_2019budget_supporter
 union all
-select comparison as Comparison,region as Region,year as Year, month as Month, to_date(date,' YYYY- MM- DD') as Date,
+select comparison as Comparison,region as Region,year as Year, month as Month, to_date(date,'YYYY-MM-DD') as Date,
 constituentid as constituentID, campaignid as campaignid,name,source as Source,resource as Resource,
 team, type, case when source in ('DDC','DRTC','Reactivation','Telephone','Web') then activedonor_actual else 0 end as NewDonor_Actual,
 0 as NewDonorAmt_Actual, case when source in ('Current') then activedonor_actual else 0 end as CurrentDonor_Actual, 
@@ -159,6 +162,8 @@ GRANT ALL ON SCHEMA gpea_analytics TO GROUP gpea;
 GRANT ALL ON SCHEMA gpea_staging TO GROUP gpea;
 GRANT ALL ON SCHEMA gpea_reporting TO GROUP gpea;
 GRANT ALL ON SCHEMA public TO GROUP gpea;
+GRANT ALL ON gpea_reporting.table_report_supporter_count TO GROUP gpea;
+GRANT ALL ON gpea_staging.monthcount TO GROUP gpea;
 
 GRANT ALL ON gpea_analytics.extract_activity_tfr TO GROUP gpea;
 GRANT ALL ON gpea_analytics.extract_automatedtransaction TO GROUP gpea;
@@ -202,6 +207,8 @@ GRANT ALL ON SCHEMA gpea_analytics TO greenpeaceearobot;
 GRANT ALL ON SCHEMA gpea_staging TO greenpeaceearobot;
 GRANT ALL ON SCHEMA gpea_reporting TO greenpeaceearobot;
 GRANT ALL ON SCHEMA public TO greenpeaceearobot;
+GRANT ALL ON gpea_reporting.table_report_supporter_count TO greenpeaceearobot;
+GRANT ALL ON gpea_staging.monthcount TO greenpeaceearobot;
 
 GRANT ALL ON gpea_analytics.extract_activity_tfr TO greenpeaceearobot;
 GRANT ALL ON gpea_analytics.extract_automatedtransaction TO greenpeaceearobot;
@@ -244,6 +251,8 @@ GRANT ALL ON SCHEMA gpea_analytics TO GROUP civis;
 GRANT ALL ON SCHEMA gpea_staging TO GROUP civis;
 GRANT ALL ON SCHEMA gpea_reporting TO GROUP civis;
 GRANT ALL ON SCHEMA public TO GROUP civis;
+GRANT ALL ON gpea_reporting.table_report_supporter_count TO GROUP civis;
+GRANT ALL ON gpea_staging.monthcount TO GROUP civis;
 
 GRANT ALL ON gpea_analytics.extract_activity_tfr TO GROUP civis;
 GRANT ALL ON gpea_analytics.extract_automatedtransaction TO GROUP civis;
