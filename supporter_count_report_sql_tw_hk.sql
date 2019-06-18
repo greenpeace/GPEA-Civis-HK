@@ -155,7 +155,8 @@ case when source in ('Lapsed') then -activedonor_actual else 0 end as LapseDonor
 ---createtable
 DROP TABLE if exists gpea_reporting.table_report_supporter_count; 
 CREATE TABLE gpea_reporting.table_report_supporter_count AS (
-select * from supporter_count_unionHKTW);
+select * from supporter_count_unionHKTW
+union all select * from gpea_analytics.support_count_KR);
 
 -- GRANT Statements for GPEA Group
 GRANT ALL ON SCHEMA gpea_analytics TO GROUP gpea;
