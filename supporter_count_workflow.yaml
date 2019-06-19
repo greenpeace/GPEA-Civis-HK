@@ -1,7 +1,20 @@
 version: '2.0'
 workflow:
   tasks:
+    korea_data_import:
+      action: civis.run_job
+      input:
+        job_id: 27354319
+      on-success:
+        - data_processing
+    data_processing:
+      action: civis.run_job
+      input:
+        job_id: 27356997
+      on-success:
+        - GPEA_Supporter_Count_Report_HK_TW_25294874
     GPEA_Supporter_Count_Report_HK_TW_25294874:
       action: civis.run_job
       input:
         job_id: 25294874
+      
