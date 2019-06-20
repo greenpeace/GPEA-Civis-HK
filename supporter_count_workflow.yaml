@@ -12,7 +12,7 @@ workflow:
       input:
         job_id: 27356997
       on-success:
-        - GPEA_Supporter_Count_Report
+        - Supporter_Count_Report
     Supporter_Count_Report:
       action: civis.run_job
       input:
