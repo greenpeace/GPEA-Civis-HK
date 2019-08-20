@@ -1,20 +1,19 @@
 version: '2.0'
 workflow:
   tasks:
-    korea_data_import:
+    Greenpeace_Korea_Supporter_Count_Import_27354319:
       action: civis.run_job
       input:
         job_id: 27354319
       on-success:
-        - data_processing
-    data_processing:
+        - GPEA_Supporter_Count_SQL_KR_daily_27356997
+    GPEA_Supporter_Count_Report_HK_TW_25294874:
+      action: civis.run_job
+      input:
+        job_id: 25294874
+    GPEA_Supporter_Count_SQL_KR_daily_27356997:
       action: civis.run_job
       input:
         job_id: 27356997
       on-success:
-        - Supporter_Count_Report
-    Supporter_Count_Report:
-      action: civis.run_job
-      input:
-        job_id: 25294874
-      
+        - GPEA_Supporter_Count_Report_HK_TW_25294874
