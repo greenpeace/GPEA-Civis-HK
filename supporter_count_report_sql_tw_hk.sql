@@ -51,12 +51,12 @@ inner join gpea_analytics.extract_campaign z on z.CampaignId=y.CampaignID) c on 
 inner join gpea_analytics.extract_contact d on b.ConstituentID=d.ConstituentID
 WHERE        
 (b.DebitDate >= TO_DATE(TO_CHAR(date_part(year,(GETDATE() - 10)) - 3,'0000')||'-'||TO_CHAR(01,'00')||'-'||TO_CHAR(01,'00'), ' YYYY- MM- DD')) 
-AND (a.MonthCount <= 13) and b.success=1
+AND (a.MonthCount <= 12) and b.success=1
 GROUP BY
 date_part(year,(DATEADD(Month, a.MonthCount - 1, b.DebitDate))), to_char((DATEADD(month, a.MonthCount - 1, b.DebitDate)),'Mon'), b.ConstituentID, date_part(month, (DATEADD(month, a.MonthCount - 1, b.DebitDate))), b.Region,c.Programme
 HAVING        
 (date_part(year,(DATEADD(Month, a.MonthCount - 1, b.DebitDate))) >= date_part(year,(GETDATE() - 10)) - 1)) a
-where date_part(year,GETDATE())>=a.currentyear and date_part(month,GETDATE())>=a.currentdate);
+where GETDATE()>=a.currentdate);
 
 ---LapsedDonor
 create temp table supporter_count_lapseddonor as 
@@ -81,9 +81,9 @@ WHERE
 GROUP BY 
 a.DebitYear, a.DebitMonth, a.ConstituentID, a.Type, a.Amount, TO_DATE(TO_CHAR(date_part(year,(DATEADD(month, 13, a.DebitDate))),'0000')||'-'||TO_CHAR(date_part(month,(DATEADD(month, 13,a.DebitDate))),'00')||'-'||TO_CHAR(date_part(day,a.DebitDate),'00'), ' YYYY- MM- DD'), a.Region,a.DebitDate,c.Programme
 HAVING       
-(TO_DATE(TO_CHAR(date_part(year,(DATEADD(month, 12, a.DebitDate))),'0000')||'-'||TO_CHAR(date_part(month,(DATEADD(month, 12,a.DebitDate))),'00')||'-'||TO_CHAR(date_part(day,a.debitdate),'00'), ' YYYY- MM- DD') < GETDATE())) x
+(TO_DATE(TO_CHAR(date_part(year,(DATEADD(month, 13, a.DebitDate))),'0000')||'-'||TO_CHAR(date_part(month,(DATEADD(month, 13,a.DebitDate))),'00')||'-'||TO_CHAR(date_part(day,a.debitdate),'00'), ' YYYY- MM- DD') <= GETDATE())) x
 where
-(Expr2 > TO_DATE(TO_CHAR(date_part(year,(DATEADD(month, 12, DebitDate))),'0000')||'-'||TO_CHAR(date_part(month,(DATEADD(month, 12,DebitDate))),'00')||'-'||TO_CHAR(date_part(day,debitdate),'00'), ' YYYY- MM- DD')) 
+(Expr2 >= TO_DATE(TO_CHAR(date_part(year,(DATEADD(month, 13, DebitDate))),'0000')||'-'||TO_CHAR(date_part(month,(DATEADD(month, 13,DebitDate))),'00')||'-'||TO_CHAR(date_part(day,debitdate),'00'), ' YYYY- MM- DD')) 
 OR
 (Expr2 IS NULL));
 
