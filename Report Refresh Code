@@ -1,0 +1,17 @@
+# Income Report: 70559
+# Supporter Count Report: 69970
+# Regular Payment Report: 70308
+# Success Report Report: 72764
+# Sun System FR&E Report: 69974
+# Cost per Donor: 74402
+# FR Management Dashboard: 70865
+# Social Media Report: 67542
+
+import civis
+client = civis.APIClient()
+
+id_list = [70559, 69970, 70308, 72764, 69974, 74402, 70865, 67542]
+
+for id in id_list:
+    refresh = client.reports.post_refresh(id)
+    print(refresh)
